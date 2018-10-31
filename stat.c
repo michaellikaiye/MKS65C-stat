@@ -11,26 +11,56 @@
 /* Permissions are of type mode_t, which is an integer type. */
 /* The permissions section of the mode is stored in the last 9 bits of the mode_t data type. */
 
-		     
-#include<stdlib.h>
-#include<stdio.h>
-#include<sys/stat.h>
-#include<unistd.h>
-#include<fcntl.h>
-#include<string.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <string.h>
+#include <time.h>
 
-void statP(int fd) {
-  struct stat x;
-  int size = stat("lo.txt", x->st_size);
-  printf("%d", size);
+void statP(char * str) {
+	struct stat * pter = malloc(sizeof(struct stat)); // allocate some memory
+	stat(str, pter); // record metadata into pter
+
+	// printing file info:
+	printf("file: temp.txt\n");
+
+	// read contents(just to practice reading)
+	int straw = open("temp.txt", O_RDONLY);
+	char arr[10];
+	read(straw, arr, 10);
+	close(straw);
+
+	printf("contents: %s", arr);
+	printf("size: %ld\n", pter -> st_size);
+	printf("mode(permissions): %o\n", pter -> st_mode);
+	char temp[100];
+	strftime(temp, 100, "%c", localtime(& (pter -> st_atime)));
+	printf("time accessed: %s\n", temp);
 }
 
-
 int main() {
-  int fd = open("lo.txt",O_CREAT | O_WRONLY, 0777);
-  int arr[10];
-  int re = write(fd, arr, sizeof arr);
-  close(fd);
-  
-  return 0;
+	// int straw = open("teemp.txt", O_CREAT | O_RDWR, 0666);
+	// int st[3];
+	// st[0] = 1;
+	// st[1] = 3;
+	// st[2] = 5;
+	// //   int i;
+	// //   for
+	// write(straw, st, sizeof(int));
+	// close(straw);
+	//
+	// int * nums = malloc(4);
+	// straw = open("teemp.txt", O_RDONLY);
+	// read(straw, nums, 4);
+	// close(straw);
+	// printf("%d\n", * nums + 5);
+	//   straw = open("temp.txt", O_RDONLY);
+	//   statP(straw);
+
+	// printing results
+	printf("_________________________\n");
+	statP("temp.txt");
+	return 0;
 }
